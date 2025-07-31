@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Report Export</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -57,23 +57,75 @@
     <h2>Export a Report</h2>
 
     <div class="form-section">
-        <select>
+        <select id="reportType">
             <option>Select Report Type</option>
             <option>User Reports</option>
             <option>Driver Performance</option>
             <option>Exceptional Drivers</option>
             <option>Batch Export Log</option>
         </select>
-        <select>
+        <select id="fileFormat">
             <option>Select File Format</option>
             <option>PDF</option>
             <option>CSV</option>
         </select>
         <input type="date" id="startDate">
         <input type="date" id="endDate">
-        <button>Export Report</button>
+        <button onclick="exportReport()">Export Report</button>
+    </div>
+
+    <!-- כפתור חזרה לדשבורד -->
+    <div style="text-align: center; margin-top: 30px;">
+        <button onclick="window.location.href='Dashboard.html'" style="background-color:#023E73; color:white; padding:12px 20px; border:none; border-radius:8px; font-size:14px; cursor:pointer;">
+            ← Back to Dashboard
+        </button>
     </div>
 </div>
+
+<script>
+    async function exportReport() {
+        const reportType = document.getElementById('reportType').value;
+        const fileFormat = document.getElementById('fileFormat').value;
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (fileFormat === 'PDF') {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(14);
+            doc.text("Report Summary", 10, 10);
+            doc.text(`Type: ${reportType}`, 10, 20);
+            doc.text(`Date Range: ${startDate} to ${endDate}`, 10, 30);
+            doc.autoTable({
+                startY: 40,
+                head: [["ID", "Name", "Status"]],
+                body: [
+                    ["001", "Sample A", "Completed"],
+                    ["002", "Sample B", "Pending"],
+                    ["003", "Sample C", "Failed"]
+                ]
+            });
+            doc.save("report.pdf");
+        } else if (fileFormat === 'CSV') {
+            const csvRows = [
+                ["ID", "Name", "Status"],
+                ["001", "Sample A", "Completed"],
+                ["002", "Sample B", "Pending"],
+                ["003", "Sample C", "Failed"]
+            ];
+            const csvContent = "data:text/csv;charset=utf-8," + csvRows.map(e => e.join(",")).join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            alert("Please select a valid file format.");
+        }
+    }
+</script>
 
 </body>
 </html>
