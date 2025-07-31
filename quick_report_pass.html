@@ -67,6 +67,12 @@
       max-height: 150px;
     }
 
+    .fullwidth-input {
+      width: 100%;
+      box-sizing: border-box;
+      min-width: 100%;
+    }
+
     button {
       width: 100%;
       padding: 14px;
@@ -157,7 +163,7 @@
       </div>
 
       <label for="location">Current Location *</label>
-      <input type="text" id="location" name="location" placeholder="Station or Area" required>
+      <input type="text" id="location" name="location" class="fullwidth-input" placeholder="Station or Area" required>
 
       <label for="issueType">Issue Type *</label>
       <select id="issueType" name="issueType" required>
@@ -169,7 +175,7 @@
       </select>
 
       <label for="description">Optional Comment</label>
-      <textarea id="description" name="description" maxlength="1000" placeholder="Additional information if available..."></textarea>
+      <textarea id="description" name="description" class="fullwidth-input" maxlength="1000" placeholder="Additional information if available..."></textarea>
 
       <label for="attachment">Attach Image/Video</label>
       <label for="attachment" class="upload-area">
