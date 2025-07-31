@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PASS System – Choose Your View</title>
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Urbanist', sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      color: #023e73;
+      margin-bottom: 2rem;
+    }
+    .button-container {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .button-container a {
+      background-color: #ff6600;
+      color: white;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .button-container a:hover {
+      background-color: #023e73;
+    }
+    .note {
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the PASS System</h1>
+  <div class="button-container">
+    <a href="user-report.html">📝 Submit a Report</a>
+    <a href="PASS Admin – Real-Time Insights.html">📊 Admin Dashboard</a>
+  </div>
+  <div class="note">Please select your destination to continue</div>
+</body>
+</html>
