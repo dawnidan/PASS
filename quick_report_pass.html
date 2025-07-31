@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Report - PASS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #eaf1f8;
+      color: #1d1d1f;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 16px auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      text-align: center;
+      color: #1c1c1e;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .row input, .row select {
+      flex: 1;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      display: block;
+      color: #333;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d1d6;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background-color: #f9f9f9;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #ff6d00;
+      background-color: #ffffff;
+      outline: none;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+      max-height: 150px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #ff6d00;
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #e65c00;
+    }
+
+    .note {
+      font-size: 0.8rem;
+      text-align: center;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    .upload-area {
+      border: 2px dashed #ffb07c;
+      border-radius: 12px;
+      text-align: center;
+      padding: 20px;
+      background-color: #fff4ed;
+      cursor: pointer;
+      color: #7d7d7f;
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+
+    .upload-area:hover {
+      background-color: #ffe7d6;
+      border-color: #ffa366;
+    }
+
+    .upload-area img {
+      width: 50px;
+      opacity: 0.4;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .preview {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .preview img, .preview video {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+  </style>
+</head>
+<body onload="autoFillDateTime(); getLocation();">
+
+  <div class="container">
+    <h2>Quick Report on a Bus Line Issue</h2>
+    <form enctype="multipart/form-data" onsubmit="submitRedirect(event)">
+      <label for="lineNumber">Line, Date & Time *</label>
+      <div class="row">
+        <input list="lineOptions" id="lineNumber" name="lineNumber" placeholder="Line Number" required>
+        <datalist id="lineOptions">
+          <option value="1">
+          <option value="2">
+          <option value="5">
+          <option value="18">
+          <option value="23">
+          <option value="66">
+          <option value="204">
+          <option value="480">
+        </datalist>
+        <input type="date" id="date" name="date" required>
+        <input type="time" id="time" name="time" required>
+      </div>
+
+      <label for="location">Current Location *</label>
+      <input type="text" id="location" name="location" placeholder="Station or Area" required>
+
+      <label for="issueType">Issue Type *</label>
+      <select id="issueType" name="issueType" required>
+        <option value="" disabled selected hidden>Select issue type</option>
+        <option value="notArrived">Line did not arrive</option>
+        <option value="notStopped">Line did not stop</option>
+        <option value="vehicle">Vehicle malfunction</option>
+        <option value="driver">Driver behavior</option>
+      </select>
+
+      <label for="description">Optional Comment</label>
+      <textarea id="description" name="description" maxlength="1000" placeholder="Additional information if available..."></textarea>
+
+      <label for="attachment">Attach Image/Video</label>
+      <label for="attachment" class="upload-area">
+        <img src="https://cdn-icons-png.flaticon.com/512/685/685655.png" alt="Upload Icon">
+        Click to upload image or video
+      </label>
+      <input type="file" id="attachment" name="attachment" accept="image/jpeg,image/png,image/*,video/*">
+
+      <div class="preview" id="filePreview"></div>
+
+      <button type="submit">Submit Report</button>
+    </form>
+
+    <p class="note">Fields marked with * are required.</p>
+  </div>
+
+  <script>
+    function autoFillDateTime() {
+      const now = new Date();
+      document.getElementById('date').value = now.toISOString().slice(0, 10);
+      document.getElementById('time').value = now.toTimeString().slice(0, 5);
+    }
+
+    async function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async function(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+
+          try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
+            const data = await response.json();
+            const address = data.address;
+            const shortAddress = `${address.road || ''} ${address.house_number || ''}`.trim();
+            document.getElementById('location').value = shortAddress || data.display_name || `Lat: ${lat.toFixed(5)}, Lon: ${lon.toFixed(5)}`;
+          } catch (error) {
+            document.getElementById('location').value = `Lat: ${lat.toFixed(5)}, Lon: ${lon.toFixed(5)}`;
+          }
+        });
+      }
+    }
+
+    document.querySelector(".upload-area").addEventListener("click", function () {
+      document.getElementById("attachment").click();
+    });
+
+    document.getElementById("attachment").addEventListener("change", function () {
+      const preview = document.getElementById("filePreview");
+      preview.innerHTML = "";
+      const file = this.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        if (file.type.startsWith("image/")) {
+          preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+        } else if (file.type.startsWith("video/")) {
+          preview.innerHTML = `<video controls src="${e.target.result}"></video>`;
+        } else {
+          preview.innerHTML = "<p>Unsupported file type</p>";
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function submitRedirect(event) {
+      event.preventDefault();
+      window.location.href = "report-confirmation.html";
+    }
+  </script>
+
+</body>
+</html>

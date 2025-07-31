@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Report Confirmation - PASS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f6f8fa;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: #fff;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+    }
+
+    .user-toggle {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      cursor: pointer;
+    }
+
+    .user-toggle svg {
+      width: 28px;
+      height: 28px;
+      transition: fill 0.3s;
+    }
+
+    .user-icon-red {
+      fill: #c62828;
+    }
+
+    .user-icon-black {
+      fill: #333;
+    }
+
+    h2 {
+      color: #0a7a00;
+      margin-bottom: 12px;
+    }
+
+    .fail h2 {
+      color: #c62828;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 10px 0;
+    }
+
+    .ref {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #ff5e00;
+    }
+
+    .blocked {
+      background-color: #ffe8e8;
+      color: #b71c1c;
+      padding: 10px;
+      margin-top: 16px;
+      border-radius: 8px;
+    }
+
+    button {
+      margin-top: 24px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      background-color: #ff5e00;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e04f00;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card" id="responseCard">
+  <div class="user-toggle" onclick="toggleUser()">
+    <svg id="userIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="user-icon-black">
+      <path d="M12 12c2.7 0 4.5-1.8 4.5-4.5S14.7 3 12 3 7.5 4.8 7.5 7.5 9.3 12 12 12zm0 2c-3 0-9 1.5-9 4.5V21h18v-2.5c0-3-6-4.5-9-4.5z"/>
+    </svg>
+  </div>
+</div>
+
+<script>
+  let isBlocked = false;
+  const confirmationNumber = "PASS-249318";
+  const blockedUntil = new Date('2025-09-21').toLocaleDateString('en-GB');
+  const isRejected = false;
+  const rejectionReason = "The report was identified as a duplicate and was rejected.";
+
+  const card = document.getElementById("responseCard");
+
+  function renderCard() {
+    card.classList.toggle("fail", isRejected);
+    card.innerHTML = `
+      <div class="user-toggle" onclick="toggleUser()">
+        <svg id="userIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="${isBlocked ? 'user-icon-red' : 'user-icon-black'}">
+          <path d="M12 12c2.7 0 4.5-1.8 4.5-4.5S14.7 3 12 3 7.5 4.8 7.5 7.5 9.3 12 12 12zm0 2c-3 0-9 1.5-9 4.5V21h18v-2.5c0-3-6-4.5-9-4.5z"/>
+        </svg>
+      </div>
+      ${isRejected ? `
+        <h2>Report Rejected</h2>
+        <p>${rejectionReason}</p>
+      ` : `
+        <h2>Report Submitted Successfully</h2>
+        <p>Thank you for your contribution!</p>
+        <p class="ref">Reference Number: ${confirmationNumber}</p>
+        ${isBlocked ? `<div class="blocked">Note: You have been temporarily blocked from submitting additional reports until <strong>${blockedUntil}</strong></div>` : ""}
+      `}
+      <button onclick="goBack()">Submit Another Report</button>
+    `;
+  }
+
+  function toggleUser() {
+    isBlocked = !isBlocked;
+    renderCard();
+  }
+
+  function goBack() {
+    window.location.href = "pass-report-form.html";
+  }
+
+  renderCard();
+</script>
+
+</body>
+</html>

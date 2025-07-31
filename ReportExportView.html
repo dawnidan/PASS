@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report Export</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+        h2 {
+            color: #1a73e8;
+            margin-bottom: 30px;
+        }
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        select, input[type="date"], button {
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 250px;
+        }
+        button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: auto;
+        }
+        button:hover {
+            background-color: #155ab6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Export a Report</h2>
+
+    <div class="form-section">
+        <select>
+            <option>Select Report Type</option>
+            <option>User Reports</option>
+            <option>Driver Performance</option>
+            <option>Exceptional Drivers</option>
+            <option>Batch Export Log</option>
+        </select>
+        <select>
+            <option>Select File Format</option>
+            <option>PDF</option>
+            <option>CSV</option>
+        </select>
+        <input type="date" id="startDate">
+        <input type="date" id="endDate">
+        <button>Export Report</button>
+    </div>
+</div>
+
+</body>
+</html>

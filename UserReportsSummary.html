@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Reports Summary</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        h2 {
+            text-align: center;
+            color: #1a73e8;
+            margin-bottom: 30px;
+        }
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        select, input[type="date"], button {
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #155ab6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background-color: #f5f5f5;
+            color: #555;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Reports Summary</h2>
+
+    <div class="filters">
+        <input type="date" id="startDate">
+        <input type="date" id="endDate">
+        <select>
+            <option>All Areas</option>
+            <option>North</option>
+            <option>Center</option>
+            <option>South</option>
+            <option>Jerusalem</option>
+            <option>Haifa</option>
+        </select>
+        <select>
+            <option>All Statuses</option>
+            <option>Open</option>
+            <option>In Progress</option>
+            <option>Resolved</option>
+            <option>Closed</option>
+        </select>
+        <select>
+            <option>All Report Types</option>
+            <option>Delay</option>
+            <option>Missing Line</option>
+            <option>Accessibility</option>
+            <option>Technical Issue</option>
+            <option>Driver Behavior</option>
+        </select>
+        <button>Export Report</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>User</th>
+                <th>Area</th>
+                <th>Status</th>
+                <th>Report Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>2025-07-06</td><td>User 1001</td><td>North</td><td>Open</td><td>Delay</td></tr>
+            <tr><td>2025-07-06</td><td>User 1002</td><td>Center</td><td>Resolved</td><td>Missing Line</td></tr>
+            <tr><td>2025-07-05</td><td>User 1003</td><td>Jerusalem</td><td>In Progress</td><td>Accessibility</td></tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
